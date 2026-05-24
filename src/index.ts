@@ -1,9 +1,9 @@
 /**
- * Disclosure (CSS)
+ * Disclosure (CSS Animation)
  * WAI-ARIA compliant disclosure pattern implementation in TypeScript.
  * Using the <details> and <summary> element.
  *
- * @version 1.2.3
+ * @version 1.2.4
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -95,7 +95,7 @@ export default class Disclosure {
     this.#initialize();
   }
 
-  open(details: HTMLDetailsElement) {
+  open(details: HTMLDetailsElement): void {
     if (this.#isDestroyed) {
       return;
     }
@@ -111,7 +111,7 @@ export default class Disclosure {
     this.#toggle(details, true);
   }
 
-  close(details: HTMLDetailsElement) {
+  close(details: HTMLDetailsElement): void {
     if (this.#isDestroyed) {
       return;
     }
@@ -127,7 +127,7 @@ export default class Disclosure {
     this.#toggle(details, false);
   }
 
-  destroy() {
+  destroy(): void {
     if (this.#isDestroyed) {
       return;
     }
@@ -141,7 +141,7 @@ export default class Disclosure {
     this.#rootElement.removeAttribute('data-disclosure-initialized');
   }
 
-  #initialize() {
+  #initialize(): void {
     this.#controller = new AbortController();
     const { signal } = this.#controller;
 
@@ -169,8 +169,6 @@ export default class Disclosure {
       return;
     }
 
-    event.preventDefault();
-    event.stopPropagation();
     const focusables = this.#summaryElements.filter(isFocusable);
     const active = getActiveElement();
 
@@ -178,6 +176,7 @@ export default class Disclosure {
       return;
     }
 
+    event.preventDefault();
     const currentIndex = focusables.indexOf(active);
     let newIndex = currentIndex;
 
@@ -199,7 +198,7 @@ export default class Disclosure {
     focusables.at(newIndex)?.focus();
   };
 
-  #toggle(details: HTMLDetailsElement, isOpen: boolean) {
+  #toggle(details: HTMLDetailsElement, isOpen: boolean): void {
     if (details.open !== isOpen) {
       details.open = isOpen;
     }
@@ -214,11 +213,11 @@ function createBinding(
   details: HTMLDetailsElement,
   summary: HTMLElement,
   content: HTMLElement,
-) {
+): Binding {
   return { details, summary, content };
 }
 
-function getActiveElement() {
+function getActiveElement(): Element | null {
   let current = document.activeElement;
 
   while (current?.shadowRoot?.activeElement) {
@@ -228,6 +227,6 @@ function getActiveElement() {
   return current;
 }
 
-function isFocusable(element: HTMLElement) {
+function isFocusable(element: HTMLElement): boolean {
   return element.tabIndex >= 0;
 }
