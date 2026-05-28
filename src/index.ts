@@ -3,7 +3,7 @@
  * WAI-ARIA compliant disclosure pattern implementation in TypeScript.
  * Using the <details> and <summary> element.
  *
- * @version 1.2.5
+ * @version 1.3.0
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -15,6 +15,7 @@
 // -----------------------------------------------------------------------------
 
 import { restoreAttributes, saveAttributes } from '@y14e/attributes-utils';
+import { createRovingTabIndex } from '@y14e/roving-tabindex';
 
 // -----------------------------------------------------------------------------
 // Types
@@ -36,7 +37,7 @@ export default class Disclosure {
   #summaryElements!: HTMLElement[];
   #contentElements!: HTMLElement[];
   #bindings = new WeakMap<HTMLElement, Binding>();
-  #controller: AbortController | null = null;
+  #cleanupRovingTabIndex: (() => void) | null = null;
   #isDestroyed = false;
 
   constructor(root: HTMLElement) {
@@ -98,6 +99,12 @@ export default class Disclosure {
       this.#bindings.set(content, binding);
     });
 
+    this.#cleanupRovingTabIndex = createRovingTabIndex(this.#rootElement, {
+      direction: 'vertical',
+      navigationOnly: true,
+      selector: `summary${NOT_NESTED}`,
+      wrap: true,
+    });
     this.#initialize();
   }
 
@@ -139,8 +146,8 @@ export default class Disclosure {
     }
 
     this.#isDestroyed = true;
-    this.#controller?.abort();
-    this.#controller = null;
+    this.#cleanupRovingTabIndex?.();
+    this.#cleanupRovingTabIndex = null;
     this.#detailsElements.length = 0;
     restoreAttributes(this.#summaryElements);
     this.#summaryElements.length = 0;
@@ -149,9 +156,6 @@ export default class Disclosure {
   }
 
   #initialize(): void {
-    this.#controller = new AbortController();
-    const { signal } = this.#controller;
-
     this.#summaryElements.forEach((summary) => {
       if (!summary) {
         return;
@@ -163,48 +167,10 @@ export default class Disclosure {
         summary.setAttribute('tabindex', '-1');
         summary.style.setProperty('pointer-events', 'none');
       }
-
-      summary.addEventListener('keydown', this.#onSummaryKeyDown, { signal });
     });
 
     this.#rootElement.setAttribute('data-disclosure-initialized', '');
   }
-
-  #onSummaryKeyDown = (event: KeyboardEvent) => {
-    const { key } = event;
-
-    if (!['End', 'Home', 'ArrowUp', 'ArrowDown'].includes(key)) {
-      return;
-    }
-
-    const focusables = this.#summaryElements.filter(isFocusable);
-    const active = getActiveElement();
-
-    if (!(active instanceof HTMLElement)) {
-      return;
-    }
-
-    event.preventDefault();
-    const currentIndex = focusables.indexOf(active);
-    let newIndex = currentIndex;
-
-    switch (key) {
-      case 'End':
-        newIndex = -1;
-        break;
-      case 'Home':
-        newIndex = 0;
-        break;
-      case 'ArrowUp':
-        newIndex = currentIndex - 1;
-        break;
-      case 'ArrowDown':
-        newIndex = (currentIndex + 1) % focusables.length;
-        break;
-    }
-
-    focusables.at(newIndex)?.focus();
-  };
 
   #toggle(details: HTMLDetailsElement, isOpen: boolean): void {
     if (details.open !== isOpen) {
@@ -223,16 +189,6 @@ function createBinding(
   content: HTMLElement,
 ): Binding {
   return { details, summary, content };
-}
-
-function getActiveElement(): Element | null {
-  let current = document.activeElement;
-
-  while (current?.shadowRoot?.activeElement) {
-    current = current.shadowRoot.activeElement;
-  }
-
-  return current;
 }
 
 function isFocusable(element: HTMLElement): boolean {
