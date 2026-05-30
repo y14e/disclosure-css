@@ -10,14 +10,14 @@ npm i @y14e/disclosure-css
 
 ```ts
 // npm
-import Disclosure from '@y14e/disclosure-css';
+import Disclosure from '@y14e/disclosure-css@1.3.1';
 
 // CDNs
-import Disclosure from 'https://esm.sh/@y14e/disclosure-css'
+import Disclosure from 'https://esm.sh/@y14e/disclosure-css@1.3.1';
 // or
-import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css/+esm';
+import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@1.3.1/+esm';
 // or
-import Disclosure from 'https://unpkg.com/@y14e/disclosure-css/dist/index.js';
+import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@1.3.1';
 ```
 
 ## Usage
