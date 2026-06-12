@@ -10,14 +10,14 @@ npm i @y14e/disclosure-css
 
 ```ts
 // npm
-import Disclosure from '@y14e/disclosure-css@1.3.4';
+import Disclosure from '@y14e/disclosure-css@1.3.5';
 
 // CDNs
-import Disclosure from 'https://esm.sh/@y14e/disclosure-css@1.3.4';
+import Disclosure from 'https://esm.sh/@y14e/disclosure-css@1.3.5';
 // or
-import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@1.3.4/+esm';
+import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@1.3.5/+esm';
 // or
-import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@1.3.4';
+import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@1.3.5';
 ```
 
 ## Usage
@@ -29,15 +29,6 @@ new Disclosure(root);
 ```
 
 ## 📦 APIs
-
-### `open`
-
-```ts
-disclosure.open(details);
-// => void
-//
-// details: HTMLDetailsElement
-```
 
 ### `close`
 
@@ -55,6 +46,15 @@ Destroys the instance and cleans up all event listeners.
 ```ts
 disclosure.destroy();
 // => void
+```
+
+### `open`
+
+```ts
+disclosure.open(details);
+// => void
+//
+// details: HTMLDetailsElement
 ```
 
 ## Demo
