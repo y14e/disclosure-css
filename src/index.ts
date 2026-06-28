@@ -3,7 +3,7 @@
  * WAI-ARIA compliant disclosure pattern implementation in TypeScript.
  * Using the <details> and <summary> element.
  *
- * @version 1.3.11
+ * @version 1.3.12
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -93,7 +93,7 @@ export default class Disclosure {
         return;
       }
 
-      const binding = createBinding(details, summary, content);
+      const binding = this.#createBinding(details, summary, content);
       this.#bindings.set(details, binding);
       this.#bindings.set(summary, binding);
       this.#bindings.set(content, binding);
@@ -157,7 +157,7 @@ export default class Disclosure {
     ]);
 
     this.#summaryElements
-      .filter((summary) => !isFocusable(summary))
+      .filter((summary) => !this.#isFocusable(summary))
       .forEach((summary) => {
         summary.setAttribute('aria-disabled', 'true');
         summary.setAttribute('tabindex', '-1');
@@ -179,20 +179,16 @@ export default class Disclosure {
       details.open = isOpen;
     }
   }
-}
 
-// -----------------------------------------------------------------------------
-// Utils
-// -----------------------------------------------------------------------------
+  #createBinding(
+    details: HTMLDetailsElement,
+    summary: HTMLElement,
+    content: HTMLElement,
+  ): Binding {
+    return { details, summary, content };
+  }
 
-function createBinding(
-  details: HTMLDetailsElement,
-  summary: HTMLElement,
-  content: HTMLElement,
-): Binding {
-  return { details, summary, content };
-}
-
-function isFocusable(element: HTMLElement): boolean {
-  return element.tabIndex >= 0;
+  #isFocusable(element: HTMLElement): boolean {
+    return element.tabIndex >= 0;
+  }
 }
