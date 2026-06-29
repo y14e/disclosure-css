@@ -13,11 +13,11 @@ npm i @y14e/disclosure-css
 import Disclosure from '@y14e/disclosure-css';
 
 // CDNs
-import Disclosure from 'https://esm.sh/@y14e/disclosure-css@1.3.13';
+import Disclosure from 'https://esm.sh/@y14e/disclosure-css@2.0.0';
 // or
-import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@1.3.13/+esm';
+import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.0/+esm';
 // or
-import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@1.3.13';
+import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@2.0.0';
 ```
 
 ## Usage
@@ -30,10 +30,10 @@ new Disclosure(root);
 
 ## 📦 APIs
 
-### `close`
+### `collapse`
 
 ```ts
-disclosure.close(details);
+disclosure.collapse(details);
 // => void
 //
 // details: HTMLDetailsElement
@@ -48,10 +48,10 @@ disclosure.destroy();
 // => void
 ```
 
-### `open`
+### `expand`
 
 ```ts
-disclosure.open(details);
+disclosure.expand(details);
 // => void
 //
 // details: HTMLDetailsElement
