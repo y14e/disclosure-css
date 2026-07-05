@@ -3,7 +3,7 @@
  * WAI-ARIA compliant disclosure pattern implementation in TypeScript.
  * Using the <details> and <summary> element.
  *
- * @version 2.0.0
+ * @version 2.0.1
  * @author Yusuke Kamiyamane
  * @license MIT
  * @copyright Copyright (c) Yusuke Kamiyamane
@@ -16,10 +16,15 @@
 
 import { restoreAttributes, saveAttributes } from '@y14e/attributes-utils';
 import { createRovingTabIndex } from '@y14e/roving-tabindex';
+import type { DeepRequired } from 'utility-types';
 
 // -----------------------------------------------------------------------------
 // Types
 // -----------------------------------------------------------------------------
+
+export interface DisclosureOptions {
+  readonly collapsible?: boolean;
+}
 
 type Binding = {
   details: HTMLDetailsElement;
@@ -32,15 +37,20 @@ type Binding = {
 // -----------------------------------------------------------------------------
 
 export default class Disclosure {
+  static defaults: DisclosureOptions = {};
+
   #rootElement!: HTMLElement;
+  #defaults = { collapsible: true };
+  #settings!: DeepRequired<DisclosureOptions>;
   #detailsElements!: HTMLDetailsElement[];
   #summaryElements!: HTMLElement[];
   #contentElements!: HTMLElement[];
   #bindings = new WeakMap<HTMLElement, Binding>();
+  #controller: AbortController | null = null;
   #cleanupRovingTabIndex: (() => void) | null = null;
   #isDestroyed = false;
 
-  constructor(root: HTMLElement) {
+  constructor(root: HTMLElement, options: DisclosureOptions = {}) {
     if (!(root instanceof HTMLElement)) {
       throw new TypeError('Invalid root element');
     }
@@ -51,6 +61,8 @@ export default class Disclosure {
     }
 
     this.#rootElement = root;
+    this.#defaults = this.#mergeOptions(this.#defaults, Disclosure.defaults);
+    this.#settings = this.#mergeOptions(this.#defaults, options);
     const NOT_NESTED = ':not(:scope summary + * *)';
     this.#detailsElements = [
       ...this.#rootElement.querySelectorAll<HTMLDetailsElement>(
@@ -124,6 +136,8 @@ export default class Disclosure {
     }
 
     this.#isDestroyed = true;
+    this.#controller?.abort();
+    this.#controller = null;
     this.#cleanupRovingTabIndex?.();
     this.#cleanupRovingTabIndex = null;
     this.#detailsElements.length = 0;
@@ -155,14 +169,18 @@ export default class Disclosure {
       'style',
       'tabindex',
     ]);
+    this.#controller = new AbortController();
+    const { signal } = this.#controller;
 
-    this.#summaryElements
-      .filter((summary) => !this.#isFocusable(summary))
-      .forEach((summary) => {
+    this.#summaryElements.forEach((summary) => {
+      if (!this.#isFocusable(summary)) {
         summary.setAttribute('aria-disabled', 'true');
         summary.setAttribute('tabindex', '-1');
         summary.style.setProperty('pointer-events', 'none');
-      });
+      }
+
+      summary.addEventListener('click', this.#onSummaryClick, { signal });
+    });
 
     this.#cleanupRovingTabIndex = createRovingTabIndex(this.#rootElement, {
       direction: 'vertical',
@@ -174,10 +192,38 @@ export default class Disclosure {
     this.#rootElement.setAttribute('data-disclosure-initialized', '');
   }
 
-  #toggle(details: HTMLDetailsElement, isExpand: boolean): void {
-    if (details.open !== isExpand) {
-      details.open = isExpand;
+  #onSummaryClick = (event: MouseEvent): void => {
+    event.preventDefault();
+    const summary = event.currentTarget;
+
+    if (!(summary instanceof HTMLElement)) {
+      return;
     }
+
+    const binding = this.#bindings.get(summary);
+
+    if (!binding) {
+      return;
+    }
+
+    const { details } = binding;
+    this.#toggle(details, !details.open);
+  };
+
+  #toggle(details: HTMLDetailsElement, isExpand: boolean): void {
+    if (details.open === isExpand) {
+      return;
+    }
+
+    if (
+      !isExpand &&
+      !this.#settings.collapsible &&
+      this.#detailsElements.filter((details) => details.open).length <= 1
+    ) {
+      return;
+    }
+
+    details.open = isExpand;
   }
 
   #createBinding(
@@ -190,5 +236,12 @@ export default class Disclosure {
 
   #isFocusable(element: HTMLElement): boolean {
     return element.tabIndex >= 0;
+  }
+
+  #mergeOptions(
+    target: DeepRequired<DisclosureOptions>,
+    source: DisclosureOptions,
+  ): DeepRequired<DisclosureOptions> {
+    return { ...target, ...source };
   }
 }

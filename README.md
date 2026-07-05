@@ -23,9 +23,33 @@ import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@2.0.0';
 ## Usage
 
 ```ts
-new Disclosure(root);
+new Disclosure(root, options);
 // => Disclosure
+//
+// root: HTMLElement
+// options (optional): DisclosureOptions
+```
 
+## 🪄 Options
+
+```ts
+interface DisclosureOptions {
+  collapsible?: boolean; // default: true
+}
+```
+
+### ⚙️ Customize defaults
+
+Override the global default settings applied to all disclosure instances.
+
+```ts
+import Disclosure from '@y14e/disclosure-css';
+
+Disclosure.defaults = {
+  collapsible: false,
+};
+
+new Disclosure(root);
 ```
 
 ## 📦 APIs
