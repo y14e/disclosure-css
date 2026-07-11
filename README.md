@@ -13,11 +13,11 @@ npm i @y14e/disclosure-css
 import Disclosure from '@y14e/disclosure-css';
 
 // CDNs
-import Disclosure from 'https://esm.sh/@y14e/disclosure-css@2.0.0';
+import Disclosure from 'https://esm.sh/@y14e/disclosure-css@2.0.2';
 // or
-import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.0/+esm';
+import Disclosure from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.2/+esm';
 // or
-import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@2.0.0';
+import Disclosure from 'https://esm.unpkg.com/@y14e/disclosure-css@2.0.2';
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ new Disclosure(root, options);
 
 ```ts
 interface DisclosureOptions {
-  collapsible?: boolean; // default: true
+  collapsible: boolean; // default: true
 }
 ```
 
