@@ -10,14 +10,14 @@ npm i @y14e/disclosure-css
 
 ```ts
 // npm
-import Disclosure from "@y14e/disclosure-css";
+import { Disclosure } from "@y14e/disclosure-css";
 
 // CDNs
-import Disclosure from "https://esm.sh/@y14e/disclosure-css@2.0.5";
+import { Disclosure } from "https://esm.sh/@y14e/disclosure-css@2.0.6";
 // or
-import Disclosure from "https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.5/+esm";
+import { Disclosure } from "https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.6/+esm";
 // or
-import Disclosure from "https://esm.unpkg.com/@y14e/disclosure-css@2.0.5";
+import { Disclosure } from "https://esm.unpkg.com/@y14e/disclosure-css@2.0.6";
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ interface DisclosureOptions {
 Override the global default settings applied to all disclosure instances.
 
 ```ts
-import Disclosure from "@y14e/disclosure-css";
+import { Disclosure } from "@y14e/disclosure-css";
 
 Disclosure.defaults = {
   collapsible: false,
