@@ -217,7 +217,7 @@ export class Disclosure {
     if (
       !isExpand &&
       !this.#settings.collapsible &&
-      this.#detailsElements.filter((details) => details.open).length <= 1
+      this.#detailsElements.filter((d) => d.open).length <= 1
     ) {
       return;
     }
