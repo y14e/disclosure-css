@@ -13,11 +13,11 @@ npm i @y14e/disclosure-css
 import { Disclosure } from '@y14e/disclosure-css';
 
 // CDNs
-import { Disclosure } from 'https://esm.sh/@y14e/disclosure-css@2.0.12';
+import { Disclosure } from 'https://esm.sh/@y14e/disclosure-css@2.1.0';
 // or
-import { Disclosure } from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.0.12/+esm';
+import { Disclosure } from 'https://cdn.jsdelivr.net/npm/@y14e/disclosure-css@2.1.0/+esm';
 // or
-import { Disclosure } from 'https://esm.unpkg.com/@y14e/disclosure-css@2.0.12';
+import { Disclosure } from 'https://esm.unpkg.com/@y14e/disclosure-css@2.1.0';
 ```
 
 ## Usage
