@@ -1,25 +1,5 @@
-/**
- * Disclosure (CSS Animation)
- * WAI-ARIA compliant disclosure pattern implementation in TypeScript.
- * Using the <details> and <summary> element.
- *
- * @version 2.1.1
- * @author Yusuke Kamiyamane
- * @license MIT
- * @copyright Copyright (c) Yusuke Kamiyamane
- * @see {@link https://github.com/y14e/disclosure-css}
- */
-
-// -----------------------------------------------------------------------------
-// import
-// -----------------------------------------------------------------------------
-
 import { restoreAttributes, saveAttributes } from '@y14e/attribute-utils';
 import { createRovingTabIndex } from '@y14e/roving-tabindex';
-
-// -----------------------------------------------------------------------------
-// Types
-// -----------------------------------------------------------------------------
 
 export interface DisclosureOptions {
   collapsible: boolean;
@@ -30,10 +10,6 @@ type Binding = {
   details: HTMLDetailsElement;
   summary: HTMLElement;
 };
-
-// -----------------------------------------------------------------------------
-// APIs
-// -----------------------------------------------------------------------------
 
 export class Disclosure {
   static defaults: Partial<DisclosureOptions> = {};
