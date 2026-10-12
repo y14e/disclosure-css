@@ -1,22 +1,15 @@
 import { restoreAttributes, saveAttributes } from '@y14e/attribute-utils';
 import { createRovingTabIndex } from '@y14e/roving-tabindex';
-
-export interface DisclosureOptions {
-  collapsible: boolean;
-}
-
-type Binding = {
-  content: HTMLElement;
-  details: HTMLDetailsElement;
-  summary: HTMLElement;
-};
+import { defaults } from '@/defaults';
+import { resolveOptions } from '@/options';
+import type { Binding, DisclosureOptions as Options } from '@/types';
 
 export class Disclosure {
-  static defaults: Partial<DisclosureOptions> = {};
+  static defaults: Partial<Options> = {};
 
   #rootElement!: HTMLElement;
-  #defaults: DisclosureOptions = { collapsible: true };
-  #settings!: DisclosureOptions;
+  #defaults = defaults;
+  #settings!: Options;
   #detailsElements!: HTMLDetailsElement[];
   #summaryElements!: HTMLElement[];
   #contentElements!: HTMLElement[];
@@ -25,7 +18,7 @@ export class Disclosure {
   #cleanupRovingTabIndex: (() => void) | null = null;
   #isDestroyed = false;
 
-  constructor(root: HTMLElement, options: Partial<DisclosureOptions> = {}) {
+  constructor(root: HTMLElement, options: Partial<Options> = {}) {
     if (!(root instanceof HTMLElement)) {
       throw new TypeError('Invalid root element');
     }
@@ -36,8 +29,8 @@ export class Disclosure {
     }
 
     this.#rootElement = root;
-    this.#defaults = this.#resolveOptions(this.#defaults, Disclosure.defaults);
-    this.#settings = this.#resolveOptions(this.#defaults, options);
+    this.#defaults = resolveOptions(this.#defaults, Disclosure.defaults);
+    this.#settings = resolveOptions(this.#defaults, options);
     const NOT_NESTED = ':not(:scope summary + * *)';
     this.#detailsElements = [
       ...this.#rootElement.querySelectorAll<HTMLDetailsElement>(
@@ -211,20 +204,5 @@ export class Disclosure {
 
   #isFocusable(element: HTMLElement): boolean {
     return element.tabIndex >= 0;
-  }
-
-  #resolveOptions(
-    target: DisclosureOptions,
-    source: Partial<DisclosureOptions>,
-  ): DisclosureOptions {
-    const merged = { ...target, ...source };
-
-    if (typeof merged.collapsible !== 'boolean') {
-      const collapsible = this.#defaults.collapsible;
-      console.warn(`Invalid collapsible option. Fallback: ${collapsible}.`);
-      merged.collapsible = collapsible;
-    }
-
-    return merged;
   }
 }
