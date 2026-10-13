@@ -1,6 +1,6 @@
 {
   "name": "@y14e/disclosure-css",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "WAI-ARIA compliant disclosure pattern implementation in TypeScript",
   "keywords": [
     "a11y",
@@ -55,6 +55,6 @@
   },
   "dependencies": {
     "@y14e/attribute-utils": "^2.0.16",
-    "@y14e/roving-tabindex": "^3.4.0"
+    "@y14e/roving-tabindex": "^3.4.1"
   }
 }
