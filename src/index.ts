@@ -170,14 +170,8 @@ export class Disclosure {
       return;
     }
 
-    const binding = this.#bindings.get(summary);
-
-    if (!binding) {
-      return;
-    }
-
-    const { details } = binding;
-    this.#toggle(details, !details.open);
+    const details = this.#bindings.get(summary)?.details;
+    details && this.#toggle(details, !details.open);
   };
 
   #toggle(details: HTMLDetailsElement, isExpand: boolean): void {
