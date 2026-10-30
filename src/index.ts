@@ -28,15 +28,10 @@ export class Disclosure {
     }
 
     this.#rootElement = root;
-    this.#settings = resolveOptions(
-      resolveOptions(defaults, Disclosure.defaults),
-      options,
-    );
+    this.#settings = resolveOptions(resolveOptions(defaults, Disclosure.defaults), options);
     const NOT_NESTED = ':not(:scope summary + * *)';
     this.#detailsElements = [
-      ...this.#rootElement.querySelectorAll<HTMLDetailsElement>(
-        `details${NOT_NESTED}`,
-      ),
+      ...this.#rootElement.querySelectorAll<HTMLDetailsElement>(`details${NOT_NESTED}`),
     ];
 
     if (!this.#detailsElements.length) {
@@ -45,9 +40,7 @@ export class Disclosure {
     }
 
     this.#summaryElements = [
-      ...this.#rootElement.querySelectorAll<HTMLElement>(
-        `summary${NOT_NESTED}`,
-      ),
+      ...this.#rootElement.querySelectorAll<HTMLElement>(`summary${NOT_NESTED}`),
     ];
 
     if (!this.#summaryElements.length) {
@@ -56,9 +49,7 @@ export class Disclosure {
     }
 
     this.#contentElements = [
-      ...this.#rootElement.querySelectorAll<HTMLElement>(
-        `summary${NOT_NESTED} + *`,
-      ),
+      ...this.#rootElement.querySelectorAll<HTMLElement>(`summary${NOT_NESTED} + *`),
     ];
 
     if (!this.#contentElements.length) {
@@ -89,10 +80,7 @@ export class Disclosure {
       return;
     }
 
-    if (
-      !(details instanceof HTMLDetailsElement) ||
-      !this.#bindings.has(details)
-    ) {
+    if (!(details instanceof HTMLDetailsElement) || !this.#bindings.has(details)) {
       console.warn('Invalid <details> element');
       return;
     }
@@ -122,10 +110,7 @@ export class Disclosure {
       return;
     }
 
-    if (
-      !(details instanceof HTMLDetailsElement) ||
-      !this.#bindings.has(details)
-    ) {
+    if (!(details instanceof HTMLDetailsElement) || !this.#bindings.has(details)) {
       console.warn('Invalid <details> element');
       return;
     }
@@ -134,11 +119,7 @@ export class Disclosure {
   }
 
   #initialize(): void {
-    saveAttributes(this.#summaryElements, [
-      'aria-disabled',
-      'style',
-      'tabindex',
-    ]);
+    saveAttributes(this.#summaryElements, ['aria-disabled', 'style', 'tabindex']);
     this.#controller = new AbortController();
     const { signal } = this.#controller;
 
@@ -190,11 +171,7 @@ export class Disclosure {
     details.open = isExpand;
   }
 
-  #createBinding(
-    details: HTMLDetailsElement,
-    summary: HTMLElement,
-    content: HTMLElement,
-  ): Binding {
+  #createBinding(details: HTMLDetailsElement, summary: HTMLElement, content: HTMLElement): Binding {
     return { content, details, summary };
   }
 
