@@ -54,10 +54,10 @@ new Disclosure(root);
 
 ## 📦 APIs
 
-### `collapse`
+### `close`
 
 ```ts
-disclosure.collapse(details);
+disclosure.close(details);
 // => void
 //
 // details: HTMLDetailsElement
@@ -72,10 +72,10 @@ disclosure.destroy();
 // => void
 ```
 
-### `expand`
+### `open`
 
 ```ts
-disclosure.expand(details);
+disclosure.open(details);
 // => void
 //
 // details: HTMLDetailsElement

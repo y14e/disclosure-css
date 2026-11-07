@@ -75,7 +75,7 @@ export class Disclosure {
     this.#initialize();
   }
 
-  collapse(details: HTMLDetailsElement): void {
+  close(details: HTMLDetailsElement): void {
     if (this.#isDestroyed) {
       return;
     }
@@ -105,7 +105,7 @@ export class Disclosure {
     this.#rootElement.removeAttribute('data-disclosure-initialized');
   }
 
-  expand(details: HTMLDetailsElement): void {
+  open(details: HTMLDetailsElement): void {
     if (this.#isDestroyed) {
       return;
     }
@@ -155,20 +155,20 @@ export class Disclosure {
     details && this.#toggle(details, !details.open);
   };
 
-  #toggle(details: HTMLDetailsElement, isExpand: boolean): void {
-    if (details.open === isExpand) {
+  #toggle(details: HTMLDetailsElement, isOpen: boolean): void {
+    if (details.open === isOpen) {
       return;
     }
 
     if (
-      !isExpand &&
+      !isOpen &&
       !this.#settings.collapsible &&
       this.#detailsElements.filter((d) => d.open).length <= 1
     ) {
       return;
     }
 
-    details.open = isExpand;
+    details.open = isOpen;
   }
 
   #createBinding(details: HTMLDetailsElement, summary: HTMLElement, content: HTMLElement): Binding {
